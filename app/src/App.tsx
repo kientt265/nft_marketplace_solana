@@ -10,6 +10,7 @@ import {
 } from "@solana/wallet-adapter-react-ui";
 import { clusterApiUrl } from "@solana/web3.js";
 import "./App.css";
+import { Header } from "./components/Header";
 
 // Default styles that can be overridden by your app
 import "@solana/wallet-adapter-react-ui/styles.css";
@@ -29,14 +30,18 @@ function App() {
   );
 
   return (
+   <div className="flex "><Header></Header>
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
           <WalletMultiButton />
+          
           <h1 className="">Hello Solana</h1>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
+
+    </div>
   );
 }
 

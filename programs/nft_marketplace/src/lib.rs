@@ -22,4 +22,8 @@ pub mod nft_minter {
     pub fn mint_nft(ctx: Context<MintNft>) -> Result<()> {
         mint::mint_nft(ctx)
     }
+
+    pub fn transfer_tokens(ctx: Context<TransferTokens>, amount: u64) -> Result<()> {
+        transfer::transfer_tokens(ctx, amount)
+    }
 }

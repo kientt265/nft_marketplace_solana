@@ -24,7 +24,29 @@ describe('NFT Minter', () => {
     const associatedTokenAccountAddress = getAssociatedTokenAddressSync(mintKeypair.publicKey, payer.publicKey);
 
     const transactionSignature = await program.methods
-      .mintNft(metadata.name, metadata.symbol, metadata.uri)
+      .createNft(metadata.name, metadata.symbol, metadata.uri)
+      .accounts({
+        payer: payer.publicKey,
+        mintAccount: mintKeypair.publicKey,
+        associatedTokenAccount: associatedTokenAccountAddress,
+      })
+      .signers([mintKeypair])
+      .rpc({ skipPreflight: true });
+
+    console.log('Success!');
+    console.log(`   Mint Address: ${mintKeypair.publicKey}`);
+    console.log(`   Transaction Signature: ${transactionSignature}`);
+  });
+
+  it('Create an NFT!', async () => {
+    // Generate a keypair to use as the address of our mint account
+    const mintKeypair = new Keypair();
+
+    // Derive the associated token address account for the mint and payer.
+    const associatedTokenAccountAddress = getAssociatedTokenAddressSync(mintKeypair.publicKey, payer.publicKey);
+
+    const transactionSignature = await program.methods
+      .mintNft()
       .accounts({
         payer: payer.publicKey,
         mintAccount: mintKeypair.publicKey,
