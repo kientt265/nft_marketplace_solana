@@ -33,7 +33,7 @@ pub struct TransferTokens<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn transfer_tokens(ctx: Context<TransferTokens>, amount: u64) -> Result<()> {
+pub fn transfer_tokens(ctx: Context<TransferTokens>) -> Result<()> {
     msg!("Transferring tokens...");
     msg!(
         "Mint: {}",
@@ -47,7 +47,10 @@ pub fn transfer_tokens(ctx: Context<TransferTokens>, amount: u64) -> Result<()> 
         "To Token Address: {}",
         &ctx.accounts.recipient_token_account.key()
     );
-
+    require!(
+        ctx.accounts.sender_token_account.amount == 1,
+        CustomError::InvalidNFT
+    );
     // Invoke the transfer instruction on the token program
     transfer(
         CpiContext::new(
@@ -58,10 +61,16 @@ pub fn transfer_tokens(ctx: Context<TransferTokens>, amount: u64) -> Result<()> 
                 authority: ctx.accounts.sender.to_account_info(),
             },
         ),
-        amount * 10u64.pow(ctx.accounts.mint_account.decimals as u32), // Transfer amount, adjust for decimals
+        1
     )?;
 
     msg!("Tokens transferred successfully.");
 
     Ok(())
+}
+
+#[error_code]
+pub enum CustomError {
+    #[msg("Invalid NFT: The token balance must be exactly 1.")]
+    InvalidNFT,
 }

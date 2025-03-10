@@ -1,6 +1,8 @@
 #![allow(clippy::result_large_err)]
 use anchor_lang::prelude::*;
 
+pub mod state;
+
 pub mod instructions;
 use instructions::*;
 
@@ -23,7 +25,7 @@ pub mod nft_minter {
         mint::mint_nft(ctx)
     }
 
-    pub fn transfer_tokens(ctx: Context<TransferTokens>, amount: u64) -> Result<()> {
-        transfer::transfer_tokens(ctx, amount)
+    pub fn transfer_tokens(ctx: Context<TransferTokens>) -> Result<()> {
+        transfer::transfer_tokens(ctx)
     }
 }
