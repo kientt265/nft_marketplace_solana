@@ -2,8 +2,8 @@ import React from 'react'
 
 export const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-gray-300">
-      <div className="container mx-auto px-4 py-8">
+    <footer className="w-full bg-gray-800 text-gray-300">
+      <div className="max-w-[1440px] mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-xl font-bold text-white mb-4">NFT MarketPlace</h3>
