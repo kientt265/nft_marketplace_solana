@@ -1,35 +1,24 @@
 use {
     anchor_lang::prelude::*,
     anchor_spl::{
-        associated_token::AssociatedToken,
-        token::{transfer,  Token, TokenAccount, Transfer},
+        token::{transfer, Token, TokenAccount, Transfer},
     },
 };
-
-use crate::state::listing;
+use crate::state::listing::Listing;  // Fix import
 
 #[derive(Accounts)]
+#[instruction(bump: u8)]  // Add bump parameter
 pub struct BuyNFT<'info> {
     #[account(mut)]
     pub buyer: Signer<'info>,
 
     #[account(
         mut,
-        seeds = [b"listing", listing.nft_mint.as_ref()],
+        seeds = [b"listing", listing.nft_mint.key().as_ref()],
         bump,
         constraint = listing.is_active == true
     )]
     pub listing: Account<'info, Listing>,
-
-    #[account(mut)]
-    pub seller: SystemAccount<'info>,
-
-    #[account(
-        mut,
-        associated_token::mint = listing.nft_mint,
-        associated_token::authority = seller,
-    )]
-    pub seller_token_account: Account<'info, TokenAccount>,
 
     #[account(
         init_if_needed,
@@ -47,7 +36,7 @@ pub struct BuyNFT<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn buy_nft(ctx: Context<BuyNFT>) -> Result<()> {
+pub fn buy_nft(ctx: Context<BuyNFT>, bump: u8) -> Result<()> {
     let listing = &mut ctx.accounts.listing;
     let price = listing.price;
 

@@ -17,46 +17,44 @@ import { Main } from "./components/Main";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 function App() {
-  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
   const network = WalletAdapterNetwork.Devnet;
-  // You can also provide a custom RPC endpoint.
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-
-  const wallets = useMemo(
-    () => [
-      // if desired, manually define specific/custom wallets here (normally not required)
-      // otherwise, the wallet-adapter will auto detect the wallets a user's browser has available
-    ],
-    [network],
-  );
+  const wallets = useMemo(() => [], [network]);
 
   return (
-    <div className=""><div className="flex justify-between items-center p-4 bg-gray-800 text-white fixed top-0 left-0 w-full shadow-md ">
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
+    <div className="min-h-screen bg-gray-900">
+      <ConnectionProvider endpoint={endpoint}>
+        <WalletProvider wallets={wallets} autoConnect>
+          <WalletModalProvider>
+            <div className="flex flex-col min-h-screen">
+              <header className="flex justify-between items-center p-4 bg-gray-800 fixed top-0 w-full z-50">
+                <div className="flex items-center space-x-8">
+                  <h1 className="text-2xl font-bold text-white">NFT MarketPlace</h1>
+                  <input
+                    type="text"
+                    placeholder="Search NFTs..."
+                    className="bg-gray-700 text-white px-4 py-2 rounded-lg w-64"
+                  />
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                    Create
+                  </button>
+                  <WalletMultiButton />
+                </div>
+              </header>
 
-        <h1 className="">NFT MarketPlace</h1>
-        <input
-  type="text"
-  placeholder="Tìm kiếm NFT..."
-  className="border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full max-w-md shadow-md"
-/>
+              <div className="flex-1 pt-16">
+                <Main />
+              </div>
 
-        <div className="flex gap-6">
-          <div className="cursor-pointer hover:bg-sky-700 rounded-lg px-4 py-2 w-full text-center ">Sell items</div>
-          <div className="cursor-pointer hover:bg-sky-700 rounded-lg px-4 py-2 w-full text-center">Collections</div>
-        </div>
-          <WalletMultiButton  />
-
-        </WalletModalProvider>
-      </WalletProvider>
-    </ConnectionProvider>
+              <Footer />
+            </div>
+          </WalletModalProvider>
+        </WalletProvider>
+      </ConnectionProvider>
     </div>
-    <Main/>
-    <Footer/>
-    </div>
-   
   );
 }
 

@@ -1,10 +1,15 @@
 
   
-use anchor_lang::prelude::Pubkey;
-  
+use anchor_lang::prelude::*;
+
+#[account]
 pub struct Listing {
-    pub seller: Pubkey,  // Địa chỉ người bán
-    pub nft_mint: Pubkey, // Mint của NFT
-    pub price: u64,       // Giá SOL
-    pub is_active: bool,  // Trạng thái niêm yết
+    pub seller: Pubkey,
+    pub nft_mint: Pubkey,
+    pub price: u64,
+    pub is_active: bool,
+}
+
+impl Listing {
+    pub const SPACE: usize = 8 + 32 + 32 + 8 + 1;
 }

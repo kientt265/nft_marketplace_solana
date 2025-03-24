@@ -1,11 +1,10 @@
 use {
     anchor_lang::prelude::*,
     anchor_spl::{
-        associated_token::AssociatedToken,
-        token::{ Mint,  TokenAccount },
+        token::{Mint, TokenAccount},
     },
 };
-use crate::state::listing;
+use crate::state::listing::Listing;  // Fix import
 
 #[derive(Accounts)]
 #[instruction(price: u64)]
@@ -37,13 +36,12 @@ pub struct ListNFT<'info> {
 
 pub fn list_nft(ctx: Context<ListNFT>, price: u64) -> Result<()> {
     let listing = &mut ctx.accounts.listing;
-    listing.seller = *ctx.accounts.seller.key;
-    listing.nft_mint = *ctx.accounts.mint_account.key();
+    listing.seller = ctx.accounts.seller.key();  // Remove *
+    listing.nft_mint = ctx.accounts.mint_account.key();  // Remove *
     listing.price = price;
     listing.is_active = true;
 
     msg!("NFT listed for sale at {} SOL", price);
-
     Ok(())
 }
 
