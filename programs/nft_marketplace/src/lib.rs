@@ -2,14 +2,21 @@
 use anchor_lang::prelude::*;
 
 pub mod state;
-
+pub mod errors;
+pub mod events;
 pub mod instructions;
 use instructions::*;
+
+use crate::instructions::{
+    mint::MintNft,
+    listnft::ListNFT,
+    buynft::BuyNFT,
+};
 
 declare_id!("6DxVGqzaLMCkcM2KDApwcq1HXUopafQoBFfTuXCKMYaV");
 
 #[program]
-pub mod nft_minter {
+pub mod nft_marketplace {
     use super::*;
     
     pub fn create_nft(
@@ -28,4 +35,12 @@ pub mod nft_minter {
     pub fn transfer_tokens(ctx: Context<TransferTokens>) -> Result<()> {
         transfer::transfer_tokens(ctx)
     }
+    pub fn list_nft(ctx: Context<ListNFT>, price: u64) -> Result<()> {
+        instructions::listnft::list_nft(ctx, price)
+    }
+
+    pub fn buy_nft(ctx: Context<BuyNFT>) -> Result<()> {
+        instructions::buynft::buy_nft(ctx)
+    }
+    
 }
